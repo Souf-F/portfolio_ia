@@ -1,8 +1,8 @@
 .sv-wrapper {
   position: relative;
-  background: #030a06;
-  border-top: 1px solid rgba(0,255,65,0.12);
-  border-bottom: 1px solid rgba(0,255,65,0.12);
+  background: #000;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   padding: 0;
   overflow: hidden;
 }
@@ -13,10 +13,10 @@
   inset: 0;
   background: linear-gradient(
     to right,
-    #030a06 0%,
+    #000 0%,
     transparent 8%,
     transparent 92%,
-    #030a06 100%
+    #000 100%
   );
   z-index: 2;
   pointer-events: none;
@@ -41,12 +41,12 @@
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(0, 255, 65, 0.55);
-  filter: drop-shadow(0 0 6px rgba(0,255,65,0.25));
+  color: rgba(255,255,255,0.55);
+  filter: none;
 }
 
 .sv-scroller span.sv-hi {
-  color: #00ff41;
+  color: #ffffff;
   font-weight: 700;
-  filter: drop-shadow(0 0 10px rgba(0,255,65,0.5));
+  filter: none;
 }

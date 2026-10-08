@@ -4,8 +4,10 @@ import { motion, useInView, useScroll, useTransform, useSpring } from 'framer-mo
 import CustomCursor from './components/CustomCursor';
 import SpotlightCard from './components/SpotlightCard';
 import Threads from './components/Threads';
-import BlurText from './components/BlurText';
 import ScrollVelocity from './components/ScrollVelocity';
+import WorksWheelDemo from './components/ui/works-wheel-demo';
+import { SplineSceneBasic } from './components/ui/spline-demo';
+import GradientMenu from './components/ui/gradient-menu';
 import './App.css';
 
 /* ── EMAIL (obfusqué pour les scrapers) ── */
@@ -99,175 +101,86 @@ function Nav() {
   );
 }
 
+const L1 = '- the future -';
+const L2 = 'of thinking';
+const CHAR_MS   = 62;    // délai entre chaque lettre
+const L1_START  = 800;   // ms après début de cycle → apparition L1
+const L2_START  = L1_START + L1.replace(/ /g, '').length * CHAR_MS + 400;
+const HIDE_AT   = 14500; // ms → début disparition (avant fin des 20s)
+const CYCLE     = 20000; // durée totale du cycle (= durée ping-pong)
+
 /* ── Hero ── */
 function Hero() {
-  const roles = ['Cybersecurity Developer', 'Penetration Tester', 'AI-Augmented Dev', 'Full Stack & Sec'];
-  const [display, setDisplay] = useState('');
-  const state = useRef({ idx: 0, char: 0, del: false });
-
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-
-  // Vidéo : défile 40% plus lentement que le scroll → effet parallaxe
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
-  // Contenu : monte légèrement plus vite
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%']);
-  // Overlay s'assombrit en scrollant
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 1.8]);
+  const titleRef = useRef(null);
 
   useEffect(() => {
-    let t;
-    const tick = () => {
-      const { idx, char, del } = state.current;
-      const word = roles[idx];
-      if (!del) {
-        setDisplay(word.slice(0, char + 1));
-        if (char + 1 === word.length) {
-          state.current.del = true;
-          t = setTimeout(tick, 1800);
-        } else {
-          state.current.char++;
-          t = setTimeout(tick, 60);
-        }
-      } else {
-        setDisplay(word.slice(0, char - 1));
-        if (char - 1 === 0) {
-          state.current = { idx: (idx + 1) % roles.length, char: 0, del: false };
-          t = setTimeout(tick, 400);
-        } else {
-          state.current.char--;
-          t = setTimeout(tick, 28);
-        }
-      }
-    };
-    t = setTimeout(tick, 900);
-    return () => clearTimeout(t);
+    let timers = [];
+    let cycleTimer = null;
+
+    function runCycle() {
+      const el = titleRef.current;
+      if (!el) return;
+      const allSpans = Array.from(el.querySelectorAll('.char'));
+      const l1Spans  = Array.from(el.querySelectorAll('.hero-title-l1 .char'));
+      const l2Spans  = Array.from(el.querySelectorAll('.hero-title-l2 .char'));
+
+      // Reset toutes les lettres
+      allSpans.forEach(s => { s.classList.remove('char--on', 'char--off'); });
+
+      // Apparition L1 lettre par lettre
+      l1Spans.forEach((s, i) => {
+        timers.push(setTimeout(() => s.classList.add('char--on'), L1_START + i * CHAR_MS));
+      });
+      // Apparition L2 lettre par lettre
+      l2Spans.forEach((s, i) => {
+        timers.push(setTimeout(() => s.classList.add('char--on'), L2_START + i * CHAR_MS));
+      });
+      // Disparition simultanée
+      timers.push(setTimeout(() => {
+        allSpans.forEach(s => { s.classList.remove('char--on'); s.classList.add('char--off'); });
+      }, HIDE_AT));
+
+      // Boucle suivante
+      cycleTimer = setTimeout(() => { timers = []; runCycle(); }, CYCLE);
+    }
+
+    runCycle();
+    return () => { timers.forEach(clearTimeout); clearTimeout(cycleTimer); };
   }, []);
 
   return (
-    <section id="hero" className="hero" ref={heroRef}>
-      <motion.video
-        className="hero-video"
-        autoPlay muted loop playsInline
-        src="/hero.mp4"
-        style={{ y: videoY }}
-      />
-      <div className="hero-overlay" />
-      <div className="scanline" aria-hidden="true" />
-
-      <motion.div className="hero-content" style={{ y: contentY }}>
-        <motion.p
-          className="eyebrow"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          HOLBERTON SCHOOL · TOULOUSE · RNCP NIV.6
-        </motion.p>
-
-        <h1 className="hero-name">
-          <BlurText text="Soufiane" delay={0.3} className="hero-line" />
-          <BlurText text="Filali" delay={0.55} className="hero-line hero-line--accent" />
-        </h1>
-
-        <p className="hero-role" aria-live="polite">
-          <span>{display}</span>
-          <span className="cursor-blink" aria-hidden="true">|</span>
-        </p>
-
-        <motion.div
-          className="hero-actions"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-        >
-          <a href="#projects" className="btn btn-primary">Accéder aux projets</a>
-          <a href="#contact" className="btn btn-ghost">Établir un contact</a>
-        </motion.div>
-      </motion.div>
-
-      <a href="#about" className="scroll-hint" aria-label="Défiler">
-        <span className="scroll-line" />
-        <span>scroll</span>
-      </a>
+    <section id="hero" className="hero">
+      <div className="gradient-menu-wrapper">
+        <GradientMenu />
+      </div>
+      <div className="hero-label">
+        <span className="hero-label-name">Soufiane Filali</span>
+        portfolio full stack agentic &amp; automatisation
+      </div>
+      <div className="stage">
+        <div ref={titleRef} className="hero-title" aria-label={`${L1} ${L2}`}>
+          <span className="hero-title-l1">
+            {[...L1].map((ch, i) => ch === ' ' ? <span key={i}>&nbsp;</span> : <span key={i} className="char">{ch}</span>)}
+          </span>
+          <span className="hero-title-l2">
+            {[...L2].map((ch, i) => ch === ' ' ? <span key={i}>&nbsp;</span> : <span key={i} className="char">{ch}</span>)}
+          </span>
+        </div>
+        <video autoPlay muted loop playsInline preload="auto" className="stage-video">
+          <source src="/hero.webm" type="video/webm" />
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      </div>
     </section>
   );
 }
 
 /* ── About ── */
 function About() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%']);
-
   return (
-    <section id="about" className="section" ref={ref} style={{ overflow: 'hidden' }}>
-      <div className="container">
-        <motion.div
-          className="section-header"
-          initial={{ opacity: 0, x: -24 }}
-          animate={inView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="section-num">01</span>
-          <h2 className="section-title">À propos</h2>
-        </motion.div>
-
-        <div className="about-grid">
-          <motion.div
-            className="about-text"
-            style={{ y: bgY }}
-            initial={{ opacity: 0, y: 28 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <p className="about-lead">
-              Je m'appelle Soufiane. J'ai choisi la cybersécurité en regardant le monde accélérer.
-            </p>
-            <p>
-              La course à l'IA est devenue trop importante pour que quiconque veuille ralentir, au risque de laisser la sécurité informatique sur le bord de la route. C'est l'une des vulnérabilités les plus sous-estimées de notre époque : des systèmes de plus en plus puissants, de plus en plus interconnectés, et de moins en moins audités.
-            </p>
-            <p>
-              J'ai choisi cette voie parce que je préfère agir en amont. Comprendre les systèmes, cartographier les menaces, construire des défenses solides, avant que les failles deviennent des catastrophes.
-            </p>
-            <p>
-              En formation à Holberton School Toulouse, je développe une expertise large : OSINT, tests d'intrusion, sécurité réseau, analyse défensive. La cybersécurité n'est pas qu'un métier pour moi. C'est une réponse à quelque chose qui me semble urgent.
-            </p>
-            <div className="about-meta">
-              <div className="meta-item">
-                <span className="meta-key">Formation</span>
-                <span className="meta-val">Holberton School Toulouse</span>
-              </div>
-              <div className="meta-item">
-                <span className="meta-key">Niveau</span>
-                <span className="meta-val">RNCP Niveau 6</span>
-              </div>
-              <div className="meta-item">
-                <span className="meta-key">Disponibilité</span>
-                <span className="meta-val meta-val--green">Alternance 2026</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="about-video-wrap"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            <video
-              className="about-video"
-              autoPlay
-              muted
-              loop
-              playsInline
-              src="/cyber-anim.mp4"
-              onContextMenu={e => e.preventDefault()}
-              controlsList="nodownload"
-            />
-          </motion.div>
-        </div>
+    <section id="about" style={{ width: '100%', minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: 1100, height: 520 }}>
+        <SplineSceneBasic />
       </div>
     </section>
   );
@@ -318,73 +231,9 @@ function Expertise() {
 
 /* ── Projects ── */
 function Projects() {
-  const navigate = useNavigate();
-  const trackRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start start', 'end end'] });
-
-  // translate X de 0% → -(100% * (n-1)/n) pour faire défiler toutes les cards
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${(PROJECTS.length - 1) * 100 / PROJECTS.length}%`]);
-  const smoothX = useSpring(x, { stiffness: 280, damping: 40, mass: 0.5 });
-
   return (
-    <section id="projects" className="proj-track-section" ref={trackRef}>
-      {/* Fond Threads fixe */}
-      <div className="proj-threads-bg">
-        <Threads color={[0.0, 0.65, 0.20]} amplitude={0.9} distance={0.2} />
-      </div>
-
-      {/* Sticky viewport */}
-      <div className="proj-sticky">
-        {/* Header en haut à gauche */}
-        <div className="proj-sticky-header">
-          <span className="section-num">03</span>
-          <h2 className="section-title">Projets</h2>
-          <p className="proj-scroll-hint">scroll →</p>
-        </div>
-
-        {/* Piste horizontale */}
-        <div className="proj-rail-wrap">
-          <motion.div className="proj-rail" style={{ x: smoothX, willChange: 'transform' }}>
-            {PROJECTS.map((p, i) => (
-              <motion.div
-                key={p.no}
-                className="proj-slide"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.05 }}
-              >
-                <SpotlightCard>
-                  {p.video && (
-                    <div className="proj-video-wrap">
-                      <video className="proj-video" src={p.video} autoPlay muted loop playsInline onContextMenu={e => e.preventDefault()} controlsList="nodownload" />
-                      <div className="proj-video-fade" />
-                    </div>
-                  )}
-                  <div className="scard-body">
-                    <div className="proj-top">
-                      <span className="proj-no">{p.no}</span>
-                      <span className="proj-year">{p.year}</span>
-                    </div>
-                    <h3 className="proj-title">{p.title}</h3>
-                    <p className="proj-desc">{p.desc}</p>
-                    <div className="proj-links">
-                      <button className="proj-link proj-link--more" onClick={() => navigate(`/projects/${p.id}`)}>
-                        <InfoIcon /> En savoir plus
-                      </button>
-                    </div>
-                  </div>
-                </SpotlightCard>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Barre de progression */}
-        <div className="proj-progress-bar">
-          <motion.div className="proj-progress-fill" style={{ scaleX: scrollYProgress, transformOrigin: 'left' }} />
-        </div>
-      </div>
+    <section id="projects" style={{ height: '100vh', width: '100%' }}>
+      <WorksWheelDemo />
     </section>
   );
 }
@@ -510,19 +359,16 @@ export default function App() {
   return (
     <>
       <CustomCursor />
-      <a href="#hero" className="skip">Aller au contenu</a>
-      <Nav />
       <main>
         <Hero />
         <ScrollVelocity
           velocity={90}
           texts={[
-            '⬤ 1 CYBERATTAQUE TOUTES LES 39 SECONDES EN FRANCE  ·  RANSOMWARE EN HAUSSE DE 255% EN 3 ANS  ·  80% DES ENTREPRISES CIBLÉES  ·  831 INCIDENTS MAJEURS RECENSÉS PAR L\'ANSSI  ·',
-            '⬤ COÛT MOYEN D\'UNE BRÈCHE DE DONNÉES : 4,2M€  ·  1 HÔPITAL ATTAQUÉ PAR SEMAINE  ·  PHISHING EN HAUSSE DE 300%  ·  3,5M POSTES NON POURVUS DANS LA CYBER  ·',
+            '⬤ ORCHESTRATION AGENTS IA  ·  MCP PROTOCOL  ·  AUTOMATISATION  ·  PIPELINES INTELLIGENTS  ·  FULL STACK AGENTIC  ·  CLAUDE AI  ·',
+            '⬤ PYTHON  ·  REACT  ·  FASTAPI  ·  DOCKER  ·  CYBERSÉCURITÉ  ·  HOLBERTON SCHOOL  ·  AEONLABS  ·',
           ]}
         />
         <About />
-        <Expertise />
         <Projects />
         <Contact />
       </main>
