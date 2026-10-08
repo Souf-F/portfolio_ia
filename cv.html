@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV — Soufiane Filali</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Barre de navigation */
+  .cv-nav {
+    width: 100%;
+    background: rgba(7, 11, 16, 0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .cv-nav a {
+    color: rgba(219, 228, 236, 0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+  .cv-nav a:hover { color: #3b82f6; }
+
+  .cv-nav a.back::before { content: '← '; }
+
+  .cv-nav .dl-btn {
+    background: #3b82f6;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  .cv-nav .dl-btn:hover { background: #2563eb; color: #fff; }
+
+  /* Zone A4 */
+  .cv-wrapper {
+    padding: 40px 24px 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cv-frame {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.5);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  embed, iframe {
+    width: 100%;
+    height: 297mm;
+    border: none;
+    display: block;
+  }
+
+  @media (max-width: 800px) {
+    .cv-frame { width: 100%; min-height: 80vh; }
+    embed, iframe { height: 80vh; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="cv-nav">
+  <a href="index.html" class="back">Retour au portfolio</a>
+  <a href="assets/soufiane_cv_fullstack.pdf" download class="dl-btn">Télécharger le CV</a>
+</nav>
+
+<div class="cv-wrapper">
+  <div class="cv-frame">
+    <embed
+      src="assets/soufiane_cv_fullstack.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+      type="application/pdf"
+      width="100%"
+      height="100%">
+    </embed>
+  </div>
+</div>
+
+</body>
+</html>

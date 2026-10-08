@@ -1,0 +1,137 @@
+.pd-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .08em;
+  color: var(--fg-dim);
+  margin-bottom: 3rem;
+  margin-top: 1rem;
+  transition: color .2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.pd-back:hover { color: var(--accent-hi); }
+
+.pd-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  margin-bottom: 5rem;
+}
+
+.pd-num {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--accent-hi);
+  letter-spacing: .15em;
+  display: block;
+  margin-bottom: .8rem;
+}
+.pd-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--fg);
+  line-height: 1.1;
+  margin-bottom: .6rem;
+}
+.pd-domain {
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--accent-hi);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin-bottom: 1.5rem;
+}
+.pd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 2rem;
+}
+.pd-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pd-preview {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 40px rgba(0,200,83,.08);
+  align-self: start;
+}
+.pd-video {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+  max-height: 340px;
+  object-fit: cover;
+}
+
+.pd-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+
+.pd-section {
+  position: relative;
+  padding-left: 3rem;
+}
+.pd-section-num {
+  position: absolute;
+  left: 0;
+  top: .1rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--accent-hi);
+  letter-spacing: .1em;
+}
+.pd-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 1rem;
+  letter-spacing: .01em;
+}
+.pd-section p {
+  color: var(--fg-dim);
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 720px;
+}
+
+.pd-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+  color: var(--fg-dim);
+}
+
+@media (max-width: 768px) {
+  .pd-hero { grid-template-columns: 1fr; gap: 2rem; }
+  .pd-section { padding-left: 0; }
+  .pd-section-num { position: static; display: block; margin-bottom: .4rem; }
+}
