@@ -3,8 +3,8 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-const CARD_H = 0.50;
-const CARD_MAX_W = 0.46;
+const CARD_H = 0.38;
+const CARD_MAX_W = 0.34;
 const CARD_RATIO = 1.45;
 const STEP = 40;
 const DRUM = 2.22;
@@ -101,7 +101,7 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
           card.style.zIndex = String(Math.round(100 - Math.abs(d) * 2));
         }
         const face = card?.firstElementChild;
-        if (face) face.style.transform = `scale(${lerp(ringScale, 1, m)})`;
+        if (face) face.style.transform = `scale(${lerp(ringScale, 1.4, m)})`;
       }
       if (labelRef.current) labelRef.current.style.opacity = String(1 - m);
       if (titleRef.current) titleRef.current.style.opacity = String(m);
