@@ -421,7 +421,7 @@ export default function App() {
           velocity={90}
           texts={[
             '⬤ ORCHESTRATION AGENTS IA  ·  MCP PROTOCOL  ·  AUTOMATISATION  ·  PIPELINES INTELLIGENTS  ·  FULL STACK AGENTIC  ·  CLAUDE AI  ·',
-            '⬤ PYTHON  ·  REACT  ·  FASTAPI  ·  DOCKER  ·  CYBERSÉCURITÉ  ·  HOLBERTON SCHOOL  ·  AEONLABS  ·',
+            '⬤ PYTHON  ·  REACT  ·  FASTAPI  ·  DOCKER  ·  HOLBERTON SCHOOL  ·  AEONLABS  ·',
           ]}
         />
         <About />
