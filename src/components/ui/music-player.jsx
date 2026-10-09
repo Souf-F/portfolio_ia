@@ -22,6 +22,14 @@ function IconPause() {
     </svg>
   );
 }
+function IconPrev() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+      <polygon points="11,1 4,6 11,11" />
+      <rect x="1" y="1" width="2" height="10" rx="1" />
+    </svg>
+  );
+}
 function IconNext() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
@@ -47,6 +55,7 @@ export function MusicPlayer() {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
   const rafRef = useRef(null);
+  const pendingPlay = useRef(false);
 
   const tracks = TRACKS;
   const hasTrack = tracks.length > 0;
@@ -64,6 +73,32 @@ export function MusicPlayer() {
     return () => cancelAnimationFrame(rafRef.current);
   }, [playing, tick]);
 
+  // Autoplay au démarrage — tente immédiatement, sinon attend le premier clic
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a || !hasTrack) return;
+    a.play()
+      .then(() => setPlaying(true))
+      .catch(() => {
+        const resume = () => {
+          a.play().then(() => setPlaying(true)).catch(() => {});
+        };
+        document.addEventListener('click', resume, { once: true });
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Quand idx change : on attend que React ait mis à jour src, puis on recharge + joue
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
+    setDuration(0);
+    a.load();
+    if (pendingPlay.current) {
+      a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+      pendingPlay.current = false;
+    }
+  }, [idx]);
+
   const toggle = () => {
     if (!hasTrack) return;
     const a = audioRef.current;
@@ -71,13 +106,14 @@ export function MusicPlayer() {
     else { a.play().then(() => setPlaying(true)).catch(() => {}); }
   };
 
-  const next = () => {
-    const a = audioRef.current;
-    const n = (idx + 1) % tracks.length;
+  const changeTrack = (n) => {
+    pendingPlay.current = playing;
     setIdx(n);
     setProgress(0);
-    if (playing) { a.load(); a.play().catch(() => {}); }
   };
+
+  const prev = () => changeTrack((idx - 1 + tracks.length) % tracks.length);
+  const next = () => changeTrack((idx + 1) % tracks.length);
 
   const seek = (e) => {
     const a = audioRef.current;
@@ -103,10 +139,9 @@ export function MusicPlayer() {
       )}
 
       <div style={{
-        position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 9999,
+        position: 'fixed', bottom: '1.5rem', right: '1.5rem', zIndex: 1000,
         display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem',
       }}>
-        {/* Player étendu */}
         {open && (
           <div style={{
             background: 'rgba(10,10,10,0.88)',
@@ -163,8 +198,13 @@ export function MusicPlayer() {
               <span>{fmt(duration)}</span>
             </div>
 
-            {/* Contrôles */}
+            {/* Contrôles : prev — play/pause — next */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
+              {tracks.length > 1 && (
+                <button onClick={prev} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
+                  <IconPrev />
+                </button>
+              )}
               <button
                 onClick={toggle}
                 disabled={!hasTrack}
@@ -181,25 +221,11 @@ export function MusicPlayer() {
                 {playing ? <IconPause /> : <IconPlay />}
               </button>
               {tracks.length > 1 && (
-                <button
-                  onClick={next}
-                  style={{
-                    background: 'none', border: 'none',
-                    color: 'rgba(255,255,255,0.4)', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    padding: '4px',
-                  }}
-                >
+                <button onClick={next} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
                   <IconNext />
                 </button>
               )}
             </div>
-
-            {!hasTrack && (
-              <p style={{ fontSize: '0.62rem', color: 'rgba(255,255,255,0.2)', textAlign: 'center', fontFamily: 'var(--font-mono, monospace)', margin: 0 }}>
-                Ajouter des pistes dans public/music/
-              </p>
-            )}
           </div>
         )}
 
