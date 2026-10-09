@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 const TRACKS = [
+  { title: 'Neural Drift', src: '/music/musique3.mp3' },
   { title: 'Midnight Compile', src: '/music/musique0.mp3' },
   { title: 'Late Night Deploy', src: '/music/musique1.mp3' },
-  { title: 'Neural Drift', src: '/music/musique3.mp3' },
   { title: 'Quiet Loop', src: '/music/musique4.mp3' },
 ];
 
