@@ -114,23 +114,19 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
 
   const to = React.useCallback((next) => { target.current = clamp(next, 0, last + 1); }, [last]);
 
-  const fullyVisible = React.useRef(false);
-  React.useEffect(() => {
-    const el = stageRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.9; },
-      { threshold: [0.9] }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   React.useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
     const onWheel = (event) => {
-      if (!fullyVisible.current && turn.current <= 0) return;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Section must be fully in viewport (4px tolerance) before activating
+      const sectionReady = rect.top >= -4 && rect.bottom <= vh + 4;
+      if (!sectionReady && turn.current < 0.05) return;
+      // Scrolling up at carousel start → back to page scroll
+      if (target.current <= 0.05 && event.deltaY < 0) return;
+      // Scrolling down at carousel end → exit to page scroll
+      if (target.current >= last + 0.95 && event.deltaY > 0) return;
       const next = target.current + event.deltaY / WHEEL_UNITS;
       if (next > 0 && next < last + 1) event.preventDefault();
       to(next);
