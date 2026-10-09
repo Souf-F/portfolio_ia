@@ -114,18 +114,27 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
 
   const to = React.useCallback((next) => { target.current = clamp(next, 0, last + 1); }, [last]);
 
+  const fullyVisible = React.useRef(false);
+  React.useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.99; },
+      { threshold: [0.99] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   React.useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
     const onWheel = (event) => {
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // Section must be fully in viewport (4px tolerance) before activating
-      const sectionReady = rect.top >= -4 && rect.bottom <= vh + 4;
-      if (!sectionReady && turn.current < 0.05) return;
-      // Scrolling up at carousel start → back to page scroll
+      // Section pas encore pleinement visible ET carousel pas démarré : laisser la page scroller
+      if (!fullyVisible.current && turn.current < 0.05) return;
+      // En haut du carousel + scroll vers le haut : retour page
       if (target.current <= 0.05 && event.deltaY < 0) return;
-      // Scrolling down at carousel end → exit to page scroll
+      // En bas du carousel + scroll vers le bas : suite page
       if (target.current >= last + 0.95 && event.deltaY > 0) return;
       const next = target.current + event.deltaY / WHEEL_UNITS;
       if (next > 0 && next < last + 1) event.preventDefault();
@@ -138,6 +147,7 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
   }, [to, last]);
 
   const drag = React.useRef(null);
+  const dragStart = React.useRef(null);
   const settling = React.useRef(0);
 
   return (
@@ -153,9 +163,15 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
         aria-label={label}
         aria-activedescendant={`works-wheel-${active}`}
         style={{ position: 'absolute', inset: 0, outline: 'none', perspective: `${metrics.depth}px`, cursor: 'grab' }}
-        onPointerDown={(e) => { drag.current = e.clientY; e.currentTarget.setPointerCapture(e.pointerId); e.currentTarget.style.cursor = 'grabbing'; }}
+        onPointerDown={(e) => { drag.current = e.clientY; dragStart.current = e.clientY; e.currentTarget.setPointerCapture(e.pointerId); e.currentTarget.style.cursor = 'grabbing'; }}
         onPointerMove={(e) => { if (drag.current === null) return; to(target.current + (drag.current - e.clientY) / DRAG_UNITS); drag.current = e.clientY; }}
-        onPointerUp={(e) => { drag.current = null; if (target.current > 1) to(Math.round(target.current)); e.currentTarget.style.cursor = 'grab'; }}
+        onPointerUp={(e) => {
+          const moved = Math.abs(e.clientY - (dragStart.current ?? e.clientY));
+          if (moved < 5 && items[active]?.href) window.open(items[active].href, '_blank', 'noopener,noreferrer');
+          drag.current = null; dragStart.current = null;
+          if (target.current > 1) to(Math.round(target.current));
+          e.currentTarget.style.cursor = 'grab';
+        }}
         onKeyDown={(e) => { if (e.key === "ArrowDown") to(Math.round(target.current) + 1); else if (e.key === "ArrowUp") to(Math.round(target.current) - 1); else return; e.preventDefault(); }}
       >
         <div ref={wheelRef} style={{ position: 'absolute', top: '50%', left: '50%', transformStyle: 'preserve-3d' }}>

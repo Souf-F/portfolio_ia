@@ -54,7 +54,7 @@ const WORKS = [
 export default function WorksWheelDemo() {
   return (
     <div style={{ width: '100%', height: '100vh', background: '#000' }}>
-      <WorksWheel items={WORKS} label="Projets" action="Voir" />
+      <WorksWheel items={WORKS} label="Projets" action="Voir le projet" />
     </div>
   );
 }
