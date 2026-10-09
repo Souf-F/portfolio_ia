@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 const TRACKS = [
-  { title: 'Musique 0', src: '/music/musique0.mp3' },
-  { title: 'Musique 1', src: '/music/musique1.mp3' },
-  { title: 'Musique 3', src: '/music/musique3.mp3' },
-  { title: 'Musique 4', src: '/music/musique4.mp3' },
+  { title: 'Midnight Compile', src: '/music/musique0.mp3' },
+  { title: 'Late Night Deploy', src: '/music/musique1.mp3' },
+  { title: 'Neural Drift', src: '/music/musique3.mp3' },
+  { title: 'Quiet Loop', src: '/music/musique4.mp3' },
 ];
 
 function IconPlay() {
