@@ -114,36 +114,46 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
 
   const to = React.useCallback((next) => { target.current = clamp(next, 0, last + 1); }, [last]);
 
-  const fullyVisible = React.useRef(false);
-  React.useEffect(() => {
-    const el = stageRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.75; },
-      { threshold: [0.75] }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const snapping = React.useRef(false);
 
   React.useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
+
     const onWheel = (event) => {
-      // Section pas encore pleinement visible ET carousel pas démarré : laisser la page scroller
-      if (!fullyVisible.current && turn.current < 0.05) return;
-      // En haut du carousel + scroll vers le haut : retour page
-      if (target.current <= 0.05 && event.deltaY < 0) return;
-      // En bas du carousel + scroll vers le bas : suite page
-      if (target.current >= last + 0.95 && event.deltaY > 0) return;
-      const next = target.current + event.deltaY / WHEEL_UNITS;
-      if (next > 0 && next < last + 1) event.preventDefault();
-      to(next);
-      window.clearTimeout(settling.current);
-      settling.current = window.setTimeout(() => to(Math.round(target.current)), SETTLE);
+      // Pendant un snap en cours : bloquer le scroll page
+      if (snapping.current) { event.preventDefault(); return; }
+
+      const rect = el.getBoundingClientRect();
+      const vh   = window.innerHeight;
+
+      // Section totalement hors vue : laisser la page scroller librement
+      if (rect.bottom < 0 || rect.top > vh) return;
+
+      // Section arrive par le bas en scrollant vers le bas : snap pour l'ancrer en haut
+      if (rect.top > 4 && event.deltaY > 0) {
+        event.preventDefault();
+        snapping.current = true;
+        window.scrollTo({ top: window.scrollY + rect.top, behavior: 'smooth' });
+        setTimeout(() => { snapping.current = false; }, 900);
+        return;
+      }
+
+      // Section ancrée (top ≈ 0) ou carousel en cours
+      const inProgress = turn.current > 0.05 || target.current > 0.05;
+      if (rect.top > -8 || inProgress) {
+        if (target.current <= 0.05 && event.deltaY < 0) return;
+        if (target.current >= last + 0.95 && event.deltaY > 0) return;
+        const next = target.current + event.deltaY / WHEEL_UNITS;
+        if (next > 0 && next < last + 1) event.preventDefault();
+        to(next);
+        window.clearTimeout(settling.current);
+        settling.current = window.setTimeout(() => to(Math.round(target.current)), SETTLE);
+      }
     };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => { el.removeEventListener("wheel", onWheel); window.clearTimeout(settling.current); };
+
+    window.addEventListener('wheel', onWheel, { passive: false });
+    return () => { window.removeEventListener('wheel', onWheel); window.clearTimeout(settling.current); };
   }, [to, last]);
 
   const drag = React.useRef(null);
@@ -161,7 +171,11 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
       lastTouchY.current = e.touches[0].clientY;
     };
     const onTouchMove = (e) => {
-      if (!fullyVisible.current && turn.current < 0.05) return;
+      const rect = el.getBoundingClientRect();
+      const vh   = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > vh) return;
+      const inProgress = turn.current > 0.05 || target.current > 0.05;
+      if (rect.top > 8 && !inProgress) return;
       const dy = touchStartY.current !== null ? touchStartY.current - e.touches[0].clientY : 0;
       if (target.current <= 0.05 && dy < 0) return;
       if (target.current >= last + 0.95 && dy > 0) return;
