@@ -9,6 +9,7 @@ import WorksWheelDemo from './components/ui/works-wheel-demo';
 import { SplineSceneBasic } from './components/ui/spline-demo';
 import { MusicPlayer } from './components/ui/music-player';
 import GradientMenu from './components/ui/gradient-menu';
+import PageLoader from './components/ui/page-loader';
 import SocialTooltip from './components/ui/social-media';
 import { IoLogoLinkedin } from 'react-icons/io5';
 import './App.css';
@@ -408,8 +409,11 @@ function Footer() {
 
 /* ── App ── */
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   return (
     <>
+      {loading && <PageLoader onDone={() => setLoading(false)} />}
       <CustomCursor />
       <main>
         <Hero />
