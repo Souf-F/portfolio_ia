@@ -668,26 +668,74 @@
 .footer a { display: inline-flex; align-items: center; gap: .4rem; transition: color .2s; }
 .footer a:hover { color: var(--accent-hi); }
 
+/* ── ABOUT INNER (desktop) ── */
+.about-inner {
+  width: 100%;
+  max-width: 1100px;
+  height: 520px;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .about-grid    { grid-template-columns: 1fr; gap: 2.5rem; }
-  .stack-grid    { grid-template-columns: repeat(2, 1fr); }
-  .projects-grid { grid-template-columns: 1fr; }
-  .contact-grid  { grid-template-columns: 1fr; gap: 2.5rem; }
-  .nav-links     { display: none; }
-  .burger        { display: flex; }
-  .nav-links.is-open {
-    display: flex; flex-direction: column;
-    position: fixed; inset: 68px 0 0 0;
-    background: rgba(3,10,6,.97);
-    backdrop-filter: blur(16px);
-    padding: 2rem; gap: 1.5rem; z-index: 99;
+  .section { padding: 4rem 0; }
+
+  /* About — colonne, robot visible en bas */
+  #about { padding: 1.5rem 1rem !important; align-items: flex-start !important; }
+  .about-inner { height: auto; }
+  .spline-card { flex-direction: column !important; height: auto !important; }
+  .spline-bio  { flex: none !important; padding: 2.5rem 2rem !important; }
+  .spline-robot {
+    flex: none !important;
+    height: 300px !important;
+    overflow: hidden;
+    touch-action: none;
   }
+
+  /* Contact form */
+  .contact-form { max-width: 100% !important; }
+
+  /* Hero label */
+  .hero-label { bottom: 1.5rem; left: 1.2rem; }
+
+  /* GradientMenu */
+  .gradient-menu { gap: 1rem; }
+  .gradient-menu-item:hover { width: 150px; }
+
+  /* Footer */
+  .footer { flex-direction: column; gap: 0.8rem; text-align: center; }
 }
+
 @media (max-width: 640px) {
-  .stack-grid { grid-template-columns: 1fr; }
-  .cf-row     { grid-template-columns: 1fr; }
-  .hero-actions { flex-direction: column; align-items: center; }
+  /* Hero */
+  .hero-label-name { font-size: clamp(1.2rem, 6vw, 1.8rem) !important; }
+  .hero-label-sub  { font-size: clamp(0.65rem, 3vw, 0.85rem) !important; }
+
+  /* GradientMenu */
+  .gradient-menu { gap: 0.6rem; }
+  .gradient-menu-item { width: 44px; height: 44px; }
+  .gradient-menu-item:hover { width: 130px; }
+  .gradient-menu-icon { font-size: 1.1rem; }
+
+  /* About — robot affiché en bas, texte lisible */
+  .spline-robot {
+    display: block !important;
+    height: 220px !important;
+    flex: none !important;
+    overflow: hidden;
+    touch-action: none;
+  }
+  .spline-bio        { padding: 1.5rem 1.2rem !important; }
+  .spline-name       { font-size: clamp(1.4rem, 7vw, 1.9rem) !important; }
+  .spline-desc       { font-size: 0.8rem !important; max-width: 100% !important; }
+  .spline-conviction { font-size: 0.78rem !important; max-width: 100% !important; margin-bottom: 1rem !important; }
+
+  /* Contact */
+  .cf-row { grid-template-columns: 1fr; }
+  .contact-intro { font-size: 0.95rem !important; }
+  .section { padding: 3rem 0; }
+
+  /* Social icons */
+  .gradient-menu-wrapper { top: 0.8rem; }
 }
 
 /* ── ABOUT ORB ── */
@@ -919,3 +967,42 @@
 .social-tooltip-item:hover .social-tooltip-link.social-keep-color .social-tooltip-icon { filter: brightness(0) invert(1) !important; }
 /* React-icon LinkedIn → blanc au hover */
 .social-tooltip-item:hover .social-tooltip-link span.social-tooltip-icon { color: #fff !important; }
+
+/* ── SPLINE CARD (About) ── */
+.spline-card {
+  width: 100%; height: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(0,0,0,0.96);
+  position: relative; overflow: hidden;
+  display: flex;
+}
+.spline-bio {
+  flex: 1; padding: 3rem 3.5rem;
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.spline-label {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 1rem;
+}
+.spline-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.8vw, 3.2rem);
+  font-weight: 700; line-height: 1.08;
+  color: #f5f5f5; margin-bottom: 1.3rem; letter-spacing: -0.01em;
+}
+.spline-desc {
+  color: #a1a1aa; line-height: 1.75; max-width: 380px;
+  margin-bottom: 0.8rem; font-size: 0.9rem;
+}
+.spline-conviction {
+  color: #52525b; line-height: 1.75; max-width: 380px;
+  font-size: 0.9rem; margin-bottom: 2rem;
+}
+.spline-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+.spline-meta-row { display: flex; gap: 1.2rem; font-size: 0.8rem; }
+.spline-meta-key { color: #3f3f46; min-width: 72px; font-family: var(--font-mono); }
+.spline-meta-val { color: #e4e4e7; }
+.spline-robot { flex: 1; position: relative; filter: brightness(1.35) contrast(1.05); }

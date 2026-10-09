@@ -119,8 +119,8 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
     const el = stageRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.99; },
-      { threshold: [0.99] }
+      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.90; },
+      { threshold: [0.90] }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -148,7 +148,28 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
 
   const drag = React.useRef(null);
   const dragStart = React.useRef(null);
+  const touchStartY = React.useRef(null);
   const settling = React.useRef(0);
+
+  // Mobile : verrouille le scroll page pendant la navigation carousel
+  React.useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const onTouchStart = (e) => { touchStartY.current = e.touches[0].clientY; };
+    const onTouchMove = (e) => {
+      if (!fullyVisible.current && turn.current < 0.05) return;
+      const dy = touchStartY.current !== null ? touchStartY.current - e.touches[0].clientY : 0;
+      if (target.current <= 0.05 && dy < 0) return;   // début + swipe bas → page remonte
+      if (target.current >= last + 0.95 && dy > 0) return; // fin + swipe haut → page descend
+      e.preventDefault();
+    };
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+    };
+  }, [last]);
 
   return (
     <section
@@ -235,11 +256,11 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
         {label}
       </div>
       <div ref={titleRef} style={{ position: 'absolute', bottom: '8%', left: '8%', pointerEvents: 'none', opacity: 0, maxWidth: '38%' }}>
-        <div style={{ fontSize: metrics.title, letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--fg)', lineHeight: 1.2 }}>
+        <div style={{ fontSize: Math.max(metrics.title, 15), letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--fg)', lineHeight: 1.2 }}>
           {items[active]?.title}
         </div>
         {items[active]?.desc && (
-          <div style={{ fontSize: metrics.title * 0.52, color: 'rgba(255,255,255,0.5)', marginTop: '0.45em', lineHeight: 1.45 }}>
+          <div style={{ fontSize: Math.max(metrics.title * 0.52, 11), color: 'rgba(255,255,255,0.5)', marginTop: '0.45em', lineHeight: 1.45 }}>
             {items[active].desc}
           </div>
         )}

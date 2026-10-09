@@ -210,7 +210,7 @@ function Hero() {
 function About() {
   return (
     <section id="about" style={{ width: '100%', minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-      <div style={{ width: '100%', maxWidth: 1100, height: 520 }}>
+      <div className="about-inner">
         <SplineSceneBasic />
       </div>
     </section>
