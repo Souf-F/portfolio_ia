@@ -12,10 +12,10 @@ dist
 dist-ssr
 *.local
 
-# Videos (trop lourdes pour git, heberger sur CDN ou LFS)
-*.mp4
+# Videos projets (lourdes — exclues sauf hero)
 *.mov
-*.webm
+public/projects/*.mp4
+public/projects/*.webm
 
 # Editor directories and files
 .vscode/*
