@@ -952,6 +952,18 @@
   opacity: 1;
 }
 
+/* ── Touch two-tap (mobile) — mirrors :hover rules ── */
+.gradient-menu-item.touch-open {
+  width: 210px;
+  border-color: transparent;
+  box-shadow: none;
+  background: transparent;
+}
+.gradient-menu-item.touch-open .gradient-menu-bg { opacity: 1; }
+.gradient-menu-item.touch-open .gradient-menu-glow { opacity: 0.3; }
+.gradient-menu-item.touch-open .gradient-menu-icon { transform: scale(0); opacity: 0; }
+.gradient-menu-item.touch-open .gradient-menu-label { transform: scale(1); opacity: 1; }
+
 /* ── Gradient menu wrapper (position dans Hero) ── */
 .gradient-menu-wrapper {
   position: absolute;

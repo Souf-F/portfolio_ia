@@ -3,8 +3,8 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-const CARD_H = 0.38;
-const CARD_MAX_W = 0.34;
+const CARD_H = 0.50;
+const CARD_MAX_W = 0.46;
 const CARD_RATIO = 1.45;
 const STEP = 40;
 const DRUM = 2.22;
