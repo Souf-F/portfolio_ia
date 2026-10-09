@@ -1010,3 +1010,9 @@
 .spline-meta-key { color: #3f3f46; min-width: 72px; font-family: var(--font-mono); }
 .spline-meta-val { color: #e4e4e7; }
 .spline-robot { flex: 1; position: relative; filter: brightness(1.35) contrast(1.05); }
+
+/* Works Wheel — hide project index on small screens */
+@media (max-width: 640px) {
+  .ww-index { display: none !important; }
+}
+

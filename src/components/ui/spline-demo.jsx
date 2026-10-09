@@ -36,7 +36,7 @@ export function SplineSceneBasic() {
       {/* Droite — robot Spline */}
       <div className="spline-robot">
         <SplineScene
-          scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+          scene="/robot.splinecode"
           className="w-full h-full"
         />
       </div>

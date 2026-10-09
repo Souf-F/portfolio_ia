@@ -7,6 +7,7 @@ import Threads from './components/Threads';
 import ScrollVelocity from './components/ScrollVelocity';
 import WorksWheelDemo from './components/ui/works-wheel-demo';
 import { SplineSceneBasic } from './components/ui/spline-demo';
+import { MusicPlayer } from './components/ui/music-player';
 import GradientMenu from './components/ui/gradient-menu';
 import SocialTooltip from './components/ui/social-media';
 import { IoLogoLinkedin } from 'react-icons/io5';
@@ -198,8 +199,8 @@ function Hero() {
           </span>
         </div>
         <video autoPlay muted loop playsInline preload="auto" className="stage-video">
-          <source src="/hero.webm" type="video/webm" />
-          <source src="/hero.mp4" type="video/mp4" />
+          <source src="/hero-v2.webm" type="video/webm" />
+          <source src="/hero-v2.mp4" type="video/mp4" />
         </video>
       </div>
     </section>
@@ -424,6 +425,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <MusicPlayer />
     </>
   );
 }

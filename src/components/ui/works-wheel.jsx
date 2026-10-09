@@ -119,8 +119,8 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
     const el = stageRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.90; },
-      { threshold: [0.90] }
+      ([entry]) => { fullyVisible.current = entry.intersectionRatio >= 0.75; },
+      { threshold: [0.75] }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -149,25 +149,41 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
   const drag = React.useRef(null);
   const dragStart = React.useRef(null);
   const touchStartY = React.useRef(null);
+  const lastTouchY = React.useRef(null);
   const settling = React.useRef(0);
 
   // Mobile : verrouille le scroll page pendant la navigation carousel
   React.useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const onTouchStart = (e) => { touchStartY.current = e.touches[0].clientY; };
+    const onTouchStart = (e) => {
+      touchStartY.current = e.touches[0].clientY;
+      lastTouchY.current = e.touches[0].clientY;
+    };
     const onTouchMove = (e) => {
       if (!fullyVisible.current && turn.current < 0.05) return;
       const dy = touchStartY.current !== null ? touchStartY.current - e.touches[0].clientY : 0;
-      if (target.current <= 0.05 && dy < 0) return;   // début + swipe bas → page remonte
-      if (target.current >= last + 0.95 && dy > 0) return; // fin + swipe haut → page descend
+      if (target.current <= 0.05 && dy < 0) return;
+      if (target.current >= last + 0.95 && dy > 0) return;
       e.preventDefault();
+      if (lastTouchY.current !== null) {
+        const delta = lastTouchY.current - e.touches[0].clientY;
+        to(target.current + delta / DRAG_UNITS);
+      }
+      lastTouchY.current = e.touches[0].clientY;
+    };
+    const onTouchEnd = () => {
+      lastTouchY.current = null;
+      window.clearTimeout(settling.current);
+      settling.current = window.setTimeout(() => to(Math.round(target.current)), SETTLE);
     };
     el.addEventListener('touchstart', onTouchStart, { passive: true });
     el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
       el.removeEventListener('touchstart', onTouchStart);
       el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
     };
   }, [last]);
 
@@ -266,7 +282,7 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
         )}
       </div>
 
-      <ol style={{ position: 'absolute', top: '7.5%', right: '2.5%', textAlign: 'right', lineHeight: 1.75, fontSize: metrics.index, listStyle: 'none', margin: 0, padding: 0, color: 'var(--muted-fg, #555)' }}>
+      <ol className="ww-index" style={{ position: 'absolute', top: '7.5%', right: '2.5%', textAlign: 'right', lineHeight: 1.75, fontSize: metrics.index, listStyle: 'none', margin: 0, padding: 0, color: 'var(--muted-fg, #555)' }}>
         {items.map((item, i) => (
           <li key={item.title}>
             <button type="button" onClick={() => to(i + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: i === active ? 600 : 400, color: i === active ? 'var(--fg)' : 'inherit', outline: 'none', fontSize: 'inherit' }}>
