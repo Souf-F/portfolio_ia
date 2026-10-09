@@ -231,7 +231,7 @@
 .btn-ghost:hover { border-color: var(--accent-hi); background: rgba(0,200,83,.06); }
 
 /* ── SECTION BASE ── */
-.section { position: relative; padding: 6rem 0; }
+.section { position: relative; padding: 6rem 0; background: #000; }
 .section--threads { overflow: hidden; }
 .container { max-width: var(--maxw); margin: 0 auto; padding: 0 2rem; }
 .section-header {
@@ -641,18 +641,18 @@
 }
 .cf-field input,
 .cf-field textarea {
-  background: var(--surface); border: 1px solid var(--border);
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15);
   border-radius: 7px; padding: .75rem 1rem;
-  color: var(--fg); font-family: var(--font-body);
+  color: #ffffff; font-family: var(--font-body);
   font-size: .9rem; outline: none;
   transition: border-color .2s, box-shadow .2s; resize: vertical;
 }
 .cf-field input::placeholder,
-.cf-field textarea::placeholder { color: var(--fg-mute); }
+.cf-field textarea::placeholder { color: rgba(255,255,255,0.35); }
 .cf-field input:focus,
 .cf-field textarea:focus {
-  border-color: var(--accent-hi);
-  box-shadow: 0 0 0 3px rgba(0,255,65,.08);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
 }
 .cf-ok  { font-size: .85rem; color: var(--accent-hi); }
 .cf-err { font-size: .85rem; color: #ff5252; }
@@ -660,8 +660,9 @@
 /* ── FOOTER ── */
 .footer {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 1.5rem 2rem; border-top: 1px solid var(--border);
+  padding: 1.5rem 2rem; border-top: 1px solid rgba(255,255,255,0.06);
   max-width: var(--maxw); margin: 0 auto;
+  background: #000;
   font-size: .82rem; color: var(--fg-mute);
 }
 .footer a { display: inline-flex; align-items: center; gap: .4rem; transition: color .2s; }
@@ -718,20 +719,42 @@
   z-index: 10;
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 700;
-  font-size: clamp(0.7rem, 0.85vw, 0.9rem);
   letter-spacing: -0.01em;
   color: #ffffff;
   text-align: left;
-  line-height: 1.55;
+  line-height: 1.45;
   display: flex;
   flex-direction: column;
   pointer-events: none;
   user-select: none;
 }
 .hero-label-name {
-  font-size: inherit;
+  font-size: clamp(1.6rem, 2.6vw, 2.8rem);
   font-weight: 700;
   color: #ffffff;
+}
+.hero-label-sub {
+  font-size: clamp(0.8rem, 1.05vw, 1.1rem);
+  color: rgba(255,255,255,0.75);
+  font-weight: 500;
+}
+
+/* Typewriter pour le label — reste visible, pas de cycle */
+.lchar {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.4em);
+  transition: opacity 0.5s ease, filter 0.5s ease,
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lchar--on {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lchar { transition: none; opacity: 1; filter: none; transform: none; }
 }
 
 /* ── PILL NAV ── */
@@ -885,3 +908,14 @@
   transform: translateX(-50%);
   z-index: 20;
 }
+
+/* ── SOCIAL TOOLTIP ── */
+.social-tooltip-item:hover .social-tooltip-fill { height: 100% !important; }
+.social-tooltip-item:hover .social-tooltip-label { opacity: 1 !important; visibility: visible !important; bottom: -50px !important; }
+.social-tooltip-item:hover .social-tooltip-link { box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+/* GitHub (fond blanc) → icône noire au hover */
+.social-tooltip-item:hover .social-tooltip-link:not(.social-keep-color) .social-tooltip-icon { filter: brightness(0) !important; }
+/* LinkedIn/Gmail (fond coloré) → icône blanche au hover */
+.social-tooltip-item:hover .social-tooltip-link.social-keep-color .social-tooltip-icon { filter: brightness(0) invert(1) !important; }
+/* React-icon LinkedIn → blanc au hover */
+.social-tooltip-item:hover .social-tooltip-link span.social-tooltip-icon { color: #fff !important; }

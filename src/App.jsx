@@ -8,6 +8,8 @@ import ScrollVelocity from './components/ScrollVelocity';
 import WorksWheelDemo from './components/ui/works-wheel-demo';
 import { SplineSceneBasic } from './components/ui/spline-demo';
 import GradientMenu from './components/ui/gradient-menu';
+import SocialTooltip from './components/ui/social-media';
+import { IoLogoLinkedin } from 'react-icons/io5';
 import './App.css';
 
 /* ── EMAIL (obfusqué pour les scrapers) ── */
@@ -109,9 +111,15 @@ const L2_START  = L1_START + L1.replace(/ /g, '').length * CHAR_MS + 400;
 const HIDE_AT   = 14500; // ms → début disparition (avant fin des 20s)
 const CYCLE     = 20000; // durée totale du cycle (= durée ping-pong)
 
+const LABEL_NAME = 'Soufiane Filali';
+const LABEL_SUB  = 'portfolio full stack agentic & automatisation';
+const LCHAR_MS   = 55;
+const LSUB_DELAY = LABEL_NAME.length * LCHAR_MS + 300;
+
 /* ── Hero ── */
 function Hero() {
   const titleRef = useRef(null);
+  const labelRef = useRef(null);
 
   useEffect(() => {
     let timers = [];
@@ -148,14 +156,37 @@ function Hero() {
     return () => { timers.forEach(clearTimeout); clearTimeout(cycleTimer); };
   }, []);
 
+  useEffect(() => {
+    const el = labelRef.current;
+    if (!el) return;
+    const timers = [];
+    const nameSpans = el.querySelectorAll('.lname .lchar');
+    const subSpans  = el.querySelectorAll('.lsub .lchar');
+    nameSpans.forEach((s, i) => {
+      timers.push(setTimeout(() => s.classList.add('lchar--on'), 400 + i * LCHAR_MS));
+    });
+    subSpans.forEach((s, i) => {
+      timers.push(setTimeout(() => s.classList.add('lchar--on'), 400 + LSUB_DELAY + i * LCHAR_MS));
+    });
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
     <section id="hero" className="hero">
       <div className="gradient-menu-wrapper">
         <GradientMenu />
       </div>
-      <div className="hero-label">
-        <span className="hero-label-name">Soufiane Filali</span>
-        portfolio full stack agentic &amp; automatisation
+      <div className="hero-label" ref={labelRef}>
+        <span className="hero-label-name lname">
+          {[...LABEL_NAME].map((ch, i) =>
+            ch === ' ' ? <span key={i}>&nbsp;</span> : <span key={i} className="lchar">{ch}</span>
+          )}
+        </span>
+        <span className="hero-label-sub lsub">
+          {[...LABEL_SUB].map((ch, i) =>
+            ch === ' ' ? <span key={i}>&nbsp;</span> : <span key={i} className="lchar">{ch}</span>
+          )}
+        </span>
       </div>
       <div className="stage">
         <div ref={titleRef} className="hero-title" aria-label={`${L1} ${L2}`}>
@@ -282,35 +313,23 @@ function Contact() {
           <h2 className="section-title">Contact</h2>
         </motion.div>
 
-        <div className="contact-grid">
-          <motion.div
-            className="contact-left"
-            initial={{ opacity: 0, x: -28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem' }}>
+          <motion.p
+            className="contact-intro"
+            style={{ textAlign: 'center', maxWidth: 480 }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <p className="contact-intro">Recruteur, collaboration technique ou offre d'alternance en cybersécurité, je suis disponible.</p>
-            <div className="contact-socials">
-              <a href="https://github.com/Souf-F" target="_blank" rel="noopener noreferrer" className="social-link">
-                <GithubIcon /> GitHub
-              </a>
-              <a href="https://linkedin.com/in/soufiane-filali-dev/" target="_blank" rel="noopener noreferrer" className="social-link">
-                <LinkedinIcon /> LinkedIn
-              </a>
-              <a href={`mailto:${CONTACT_EMAIL}`} className="social-link">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>
-                </svg>
-                {CONTACT_EMAIL}
-              </a>
-            </div>
-          </motion.div>
+            Recruteur, collaboration technique ou offre d'alternance, je suis disponible.
+          </motion.p>
 
           <motion.form
             className="contact-form"
             onSubmit={onSubmit}
-            initial={{ opacity: 0, x: 28 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            style={{ width: '100%', maxWidth: 560 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <input type="hidden" name="access_key" value="58c39c33-d27a-43fe-8f17-84710bf49a76" />
@@ -336,6 +355,38 @@ function Contact() {
             {status === 'ok'    && <p className="cf-ok">Message envoyé ✓</p>}
             {status === 'error' && <p className="cf-err">Erreur — écris-moi directement par email.</p>}
           </motion.form>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.35 }}
+          >
+            <SocialTooltip items={[
+              {
+                href: 'https://github.com/Souf-F',
+                ariaLabel: 'GitHub',
+                tooltip: 'GitHub',
+                color: '#ffffff',
+                svgUrl: 'https://cdn.simpleicons.org/github/ffffff',
+              },
+              {
+                href: 'https://www.linkedin.com/in/soufiane-filali-dev/',
+                ariaLabel: 'LinkedIn',
+                tooltip: 'LinkedIn',
+                color: '#0077b5',
+                icon: <IoLogoLinkedin />,
+                iconColor: '#0077b5',
+              },
+              {
+                href: `mailto:${CONTACT_EMAIL}`,
+                ariaLabel: 'Email',
+                tooltip: 'Email',
+                color: '#ea4335',
+                svgUrl: 'https://cdn.simpleicons.org/gmail/ea4335',
+                keepColor: true,
+              },
+            ]} />
+          </motion.div>
         </div>
       </div>
     </section>

@@ -32,7 +32,7 @@ export function SplineSceneBasic() {
           color: 'rgba(255,255,255,0.3)',
           marginBottom: '1rem',
         }}>
-          01 — À propos
+          À propos
         </p>
 
         <h1 style={{
@@ -48,7 +48,7 @@ export function SplineSceneBasic() {
         </h1>
 
         <p style={{ color: '#a1a1aa', lineHeight: 1.75, maxWidth: 380, marginBottom: '0.8rem', fontSize: '0.9rem' }}>
-          Holberton School Toulouse. Je construis des solutions d'automatisation — des agents qui prennent des décisions, exécutent des tâches et livrent un résultat sans qu'on ait à intervenir.
+          Holberton School Toulouse. Je construis des solutions d'automatisation : des agents qui prennent des décisions, exécutent des tâches et livrent un résultat sans qu'on ait à intervenir.
         </p>
         <p style={{ color: '#52525b', lineHeight: 1.75, maxWidth: 380, fontSize: '0.9rem', marginBottom: '2rem' }}>
           Je cherche une alternance en 2026. Si tu as un process qui tourne encore à la main, on peut en parler.
