@@ -35,8 +35,8 @@ const STACK = [
 const PROJECTS = [
   { no: '01', id: 'sentinel-scanner', title: 'Sentinel Scanner', year: '2026', domain: 'Sécurité offensive', desc: 'Scanner de vulnérabilités web piloté par agent. 24 contrôles automatisés, 30 ports scannés, 46 chemins sensibles. Terminal animé en temps réel, scoring de risque complet.', tags: ['Python', 'Flask', 'Security', 'Agentic'], gh: 'https://github.com/Souf-F', live: null, video: '/projects/sentinel.mov' },
   { no: '02', id: 'cyber-cheatsheet', title: 'Cyber Cheatsheet', year: '2026', domain: "Plateforme d'apprentissage", desc: "54 fiches interactives, 43 badges débloquables, progression par expérience. Une bibliothèque vivante pour apprendre la cybersécurité. Entièrement vanilla JS.", tags: ['Vanilla JS', 'UX', 'Gamification'], gh: 'https://github.com/Souf-F', live: 'https://cyber-cheatsheet.aeonlabs.fr/', video: '/projects/cybersheet.mov' },
-  { no: '03', id: 'aeris', title: 'AERIS', year: '2026', domain: 'Gestion des risques', desc: "Analyse de risque cyber pour la supply chain aéronautique. Scoring EBIOS Risk Manager, matrice 5×5, 9 actifs pré-chargés — Thales, Airbus D&S, Safran.", tags: ['HTML', 'CSS', 'JS', 'EBIOS RM'], gh: 'https://github.com/Souf-F/aeris-risk-assessment', live: 'https://aeris.aeonlabs.fr/', video: '/projects/aeris.mov' },
-  { no: '04', id: 'eco-audit', title: 'ECO-AUDIT', year: '2026', domain: 'Serious Game — équipe de 9', desc: "Jeu sérieux d'enquête anti-corruption dans une entreprise fictive. Organigramme interactif, timer, dossiers confidentiels. Construit avec une équipe de 9 étudiants.", tags: ['HTML', 'CSS', 'JS', 'Teamwork'], gh: 'https://github.com/Souf-F/ecoauditv3', live: 'https://ecoaudit.aeonlabs.fr/', video: '/projects/ecoaudit.mov' },
+  { no: '03', id: 'aeris', title: 'AERIS', year: '2026', domain: 'Gestion des risques', desc: "Analyse de risque cyber pour la supply chain aéronautique. Scoring EBIOS Risk Manager, matrice 5×5, 9 actifs pré-chargés : Thales, Airbus D&S, Safran.", tags: ['HTML', 'CSS', 'JS', 'EBIOS RM'], gh: 'https://github.com/Souf-F/aeris-risk-assessment', live: 'https://aeris.aeonlabs.fr/', video: '/projects/aeris.mov' },
+  { no: '04', id: 'eco-audit', title: 'ECO-AUDIT', year: '2026', domain: 'Serious Game, équipe de 9', desc: "Jeu sérieux d'enquête anti-corruption dans une entreprise fictive. Organigramme interactif, timer, dossiers confidentiels. Construit avec une équipe de 9 étudiants.", tags: ['HTML', 'CSS', 'JS', 'Teamwork'], gh: 'https://github.com/Souf-F/ecoauditv3', live: 'https://ecoaudit.aeonlabs.fr/', video: '/projects/ecoaudit.mov' },
 ];
 
 /* ── Icons ── */
@@ -355,7 +355,7 @@ function Contact() {
               {status === 'sending' ? 'Envoi…' : cooldown > 0 ? `Patienter ${cooldown}s` : 'Envoyer →'}
             </button>
             {status === 'ok'    && <p className="cf-ok">Message envoyé ✓</p>}
-            {status === 'error' && <p className="cf-err">Erreur — écris-moi directement par email.</p>}
+            {status === 'error' && <p className="cf-err">Erreur. Ecris-moi directement par email.</p>}
           </motion.form>
 
           <motion.div

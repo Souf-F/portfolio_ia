@@ -3,12 +3,12 @@ import { WorksWheel } from "./works-wheel";
 const WORKS = [
   {
     title: "Pennyworth",
-    desc: "Agent de gestion financière — analyse et catégorise tes dépenses automatiquement.",
+    desc: "Agent de gestion financière, analyse et catégorise tes dépenses automatiquement.",
     image: "/projects/pennyworth.jpg",
     href: "https://pennyworth.aeonlabs.fr",
   },
   {
-    title: "Oracle — La Taupe",
+    title: "Oracle : La Taupe",
     desc: "Jeu de déduction multijoueur avec IA intégrée comme joueur adversaire.",
     image: "/projects/oracle.jpg",
     href: "https://oracle.aeonlabs.fr",
@@ -33,7 +33,7 @@ const WORKS = [
   },
   {
     title: "AERIS",
-    desc: "Assistant météo intelligent — analyse les conditions et génère des recommandations automatisées.",
+    desc: "Assistant météo intelligent, analyse les conditions et génère des recommandations automatisées.",
     image: "/projects/aeris.jpg",
     href: "https://aeris.aeonlabs.fr/",
   },
@@ -45,7 +45,7 @@ const WORKS = [
   },
   {
     title: "Fantôme du Ciel",
-    desc: "Simulation de vol historique — incarnez un pilote fantôme de la Seconde Guerre mondiale.",
+    desc: "Simulation de vol historique, incarnez un pilote fantôme de la Seconde Guerre mondiale.",
     image: "/projects/fantome.jpg",
     href: "https://fantome-du-ciel.aeonlabs.fr/index.html",
   },
