@@ -1017,8 +1017,6 @@
   margin-bottom: 1.8rem;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.12) transparent;
-  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
 }
 .bio-scroll-wrap::-webkit-scrollbar { width: 3px; }
 .bio-scroll-wrap::-webkit-scrollbar-track { background: transparent; }

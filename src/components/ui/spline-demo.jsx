@@ -2,9 +2,8 @@ import { SplineScene } from './spline-scene'
 import { Spotlight } from './spotlight'
 
 const BIO_LINES = [
-  "Je m'appelle Soufiane Filali, étudiant développeur à Holberton School Toulouse, en spécialisation cybersécurité.",
+  "Je m'appelle Soufiane Filali, étudiant développeur à Holberton School Toulouse, en spécialisation full stack agentic & solutions d'automatisation.",
   "En 2026 j'ai construit des outils concrets, des agents autonomes et des pipelines intelligents qui font le travail sans intervention humaine.",
-  "Je me spécialise dans l'agentic. Pas l'IA comme buzzword, l'IA comme moteur d'exécution réel.",
   "Des agents qui raisonnent, décident et agissent sans supervision constante. Des systèmes qui transforment une intention en résultat.",
   "Le monde de demain tourne sur des systèmes automatisés. Je construis les briques de ce monde.",
   "Disponible en alternance 2026. Si tu as un process qui tourne encore à la main, je peux le rendre autonome.",
