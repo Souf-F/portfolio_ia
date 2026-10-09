@@ -73,18 +73,27 @@ export function MusicPlayer() {
     return () => cancelAnimationFrame(rafRef.current);
   }, [playing, tick]);
 
-  // Autoplay au démarrage — tente immédiatement, sinon attend le premier clic
+  // Autoplay au démarrage — tente immédiatement, sinon au premier geste utilisateur
   useEffect(() => {
     const a = audioRef.current;
     if (!a || !hasTrack) return;
+
+    const EVENTS = ['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'];
+
+    const cleanup = () => EVENTS.forEach(ev => document.removeEventListener(ev, resume));
+
+    const resume = () => {
+      cleanup();
+      a.play().then(() => setPlaying(true)).catch(() => {});
+    };
+
     a.play()
       .then(() => setPlaying(true))
       .catch(() => {
-        const resume = () => {
-          a.play().then(() => setPlaying(true)).catch(() => {});
-        };
-        document.addEventListener('click', resume, { once: true });
+        EVENTS.forEach(ev => document.addEventListener(ev, resume, { once: true, passive: true }));
       });
+
+    return cleanup;
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Quand idx change : on attend que React ait mis à jour src, puis on recharge + joue
