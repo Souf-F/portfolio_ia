@@ -736,6 +736,10 @@
 
   /* Social icons */
   .gradient-menu-wrapper { top: 0.8rem; }
+
+  /* Hero — texte derrière le robot plus petit */
+  .hero-title-l1,
+  .hero-title-l2 { font-size: 10cqw !important; }
 }
 
 /* ── ABOUT ORB ── */
