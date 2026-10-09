@@ -172,6 +172,8 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
                   role="option"
                   aria-selected={i === active}
                   href={item.href}
+                  target={item.href ? "_blank" : undefined}
+                  rel={item.href ? "noopener noreferrer" : undefined}
                   ref={(node) => { cardRefs.current[i] = node; }}
                   style={{
                     position: 'absolute',
@@ -220,8 +222,15 @@ export function WorksWheel({ items, label = "Works '26", action = "View", classN
       <div ref={labelRef} style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: metrics.title, letterSpacing: '-0.02em', pointerEvents: 'none', color: 'var(--fg)' }}>
         {label}
       </div>
-      <div ref={titleRef} style={{ position: 'absolute', top: '50%', left: '8%', transform: 'translateY(-50%)', fontSize: metrics.title, letterSpacing: '-0.02em', pointerEvents: 'none', opacity: 0, color: 'var(--fg)' }}>
-        {items[active]?.title}
+      <div ref={titleRef} style={{ position: 'absolute', bottom: '8%', left: '8%', pointerEvents: 'none', opacity: 0, maxWidth: '38%' }}>
+        <div style={{ fontSize: metrics.title, letterSpacing: '-0.02em', fontWeight: 600, color: 'var(--fg)', lineHeight: 1.2 }}>
+          {items[active]?.title}
+        </div>
+        {items[active]?.desc && (
+          <div style={{ fontSize: metrics.title * 0.52, color: 'rgba(255,255,255,0.5)', marginTop: '0.45em', lineHeight: 1.45 }}>
+            {items[active].desc}
+          </div>
+        )}
       </div>
 
       <ol style={{ position: 'absolute', top: '7.5%', right: '2.5%', textAlign: 'right', lineHeight: 1.75, fontSize: metrics.index, listStyle: 'none', margin: 0, padding: 0, color: 'var(--muted-fg, #555)' }}>
