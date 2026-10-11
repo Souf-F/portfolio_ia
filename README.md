@@ -1,24 +1,42 @@
 # Portfolio — Soufiane Filali
 
-Portfolio personnel développé en React + Vite. Cybersécurité, développement full stack, projets personnels.
+Personal portfolio built with React + Vite. Covers cybersecurity projects, fullstack work, and AI/automation experiments.
 
 ## Stack
 
-- React 18 + Vite
-- Framer Motion (animations, scroll parallax)
-- React Router DOM
-- ogl (WebGL threads background)
-- Web3Forms (formulaire de contact)
-- Lenis (smooth scroll)
+| Layer | Tech |
+|-------|------|
+| Framework | React 18 + Vite |
+| Animations | Framer Motion — scroll parallax, entrance effects |
+| 3D / WebGL | ogl — animated threads background |
+| Routing | React Router DOM |
+| Scroll | Lenis — smooth scroll |
+| Contact | Web3Forms |
 
-## Lancer en local
+## Sections
+
+```
+Hero
+ └─ WebGL animated background, intro text
+
+About
+ └─ Background, path, focus areas
+
+Projects
+ └─ Cards with individual detail pages (React Router)
+
+Contact
+ └─ Form via Web3Forms
+```
+
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Le site sera accessible sur `http://localhost:5173`
+
 
 ## Build
 
@@ -30,25 +48,18 @@ npm run build
 
 ```
 src/
-  App.jsx           # Page principale, toutes les sections
-  App.css           # Styles globaux
-  components/       # CustomCursor, Threads, SpotlightCard, ScrollVelocity, BlurText
-  pages/            # ProjectDetail (page projet individuelle)
-  data/             # projects.js (contenu des projets)
+├── App.jsx                   # Main layout, all sections
+├── App.css                   # Global styles
+├── components/               # CustomCursor, Threads, SpotlightCard, ScrollVelocity, BlurText
+├── pages/
+│   └── ProjectDetail.jsx     # Individual project page
+└── data/
+    └── projects.js           # Project content
 public/
-  hero.mp4          # Video hero
-  cyber-anim.mp4    # Video section a propos
-  projects/         # Videos des projets
+├── hero.mp4
+└── cyber-anim.mp4
 ```
 
-## Sections
+---
 
-- Hero avec video parallax et effet typewriter
-- A propos avec video cybersec
-- Expertise technique (cybersecurite, langages, IA)
-- Projets en scroll horizontal (Sentinel Scanner, Cyber Cheatsheet, AERIS, ECO-AUDIT)
-- Contact avec formulaire anti-spam
-
-## Contact
-
-soufianefilalipro@gmail.com
+Soufiane Filali · Holberton School France
